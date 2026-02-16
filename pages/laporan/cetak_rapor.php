@@ -1,5 +1,5 @@
 <?php
-include '../../config/database.php';
+include_once 'config/database.php';
 
 $siswa_id = $_GET['siswa_id'];
 $semester = $_GET['semester'];

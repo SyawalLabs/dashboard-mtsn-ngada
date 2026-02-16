@@ -1,5 +1,5 @@
 <?php
-include '../../config/database.php';
+include_once 'config/database.php';
 
 $kelas_id = $_POST['kelas_id'];
 $mapel_id = $_POST['mapel_id'];

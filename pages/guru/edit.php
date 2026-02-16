@@ -1,7 +1,5 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include '../../config/database.php';
-
     $id = $_POST['id'];
     $nip = $db->escape_string($_POST['nip']);
     $nama = $db->escape_string($_POST['nama']);
@@ -24,10 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-include '../../config/database.php';
-include '../includes/header.php';
-include '../includes/sidebar.php';
+?>
 
+<?php
+session_start();
 $id = $_GET['id'];
 $guru = $db->query("SELECT * FROM guru WHERE id = $id")->fetch_assoc();
 
@@ -41,7 +39,7 @@ if (!$guru) {
 <div class="container-fluid px-0">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4><i class="bi bi-pencil me-2"></i>Edit Guru</h4>
-        <a href="index.php?page=guru" class="btn btn-secondary">
+        <a href="../index.php?page=guru" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
@@ -93,5 +91,3 @@ if (!$guru) {
         </div>
     </div>
 </div>
-
-<?php include '../../includes/footer.php'; ?>

@@ -1,7 +1,5 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include '../../config/database.php';
-
     $kode = $db->escape_string($_POST['kode']);
     $nama = $db->escape_string($_POST['nama']);
     $kkm = $_POST['kkm'];
@@ -21,15 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-include '../../config/database.php';
-include '../../includes/header.php';
-include '../../includes/sidebar.php';
 ?>
 
 <div class="container-fluid px-0">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4><i class="bi bi-plus-circle me-2"></i>Tambah Mata Pelajaran</h4>
-        <a href="index.php?page=mapel" class="btn btn-secondary">
+        <a href="../index.php?page=mapel" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
@@ -62,5 +57,3 @@ include '../../includes/sidebar.php';
         </div>
     </div>
 </div>
-
-<?php include '../../includes/footer.php'; ?>

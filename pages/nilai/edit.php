@@ -1,7 +1,5 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include '../../config/database.php';
-
     $id = $_POST['id'];
     $uh = $_POST['uh'];
     $uts = $_POST['uts'];
@@ -23,15 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-include '../../config/database.php';
-include '../includes/header.php';
-include '../includes/sidebar.php';
+?>
 
+<?php
+session_start();
 $id = $_GET['id'];
-$nilai = $db->query("SELECT n.*, s.nama as nama_siswa, s.nis, m.nama_mapel FROM nilai n 
-                     JOIN siswa s ON n.siswa_id = s.id 
-                     JOIN mapel m ON n.mapel_id = m.id 
-                     WHERE n.id = $id")->fetch_assoc();
+$nilai = $db->query("SELECT n.*, s.nama as nama_siswa, s.nis, m.nama_mapel FROM nilai n
+JOIN siswa s ON n.siswa_id = s.id
+JOIN mapel m ON n.mapel_id = m.id
+WHERE n.id = $id")->fetch_assoc();
 
 if (!$nilai) {
     $_SESSION['error'] = "Nilai tidak ditemukan";
@@ -43,7 +41,7 @@ if (!$nilai) {
 <div class="container-fluid px-0">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4><i class="bi bi-pencil me-2"></i>Edit Nilai</h4>
-        <a href="index.php?page=nilai" class="btn btn-secondary">
+        <a href="../index.php?page=nilai" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
@@ -122,5 +120,3 @@ if (!$nilai) {
         input.addEventListener('input', updateRataRata);
     });
 </script>
-
-<?php include '../../includes/footer.php'; ?>

@@ -40,9 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['error'] = "Ada kesalahan saat menyimpan nilai";
     }
 
-    header("Location: index.php?page=nilai");
+    header("Location: ../index.php?page=nilai");
     exit();
 }
+
 ?>
 
 <div class="container-fluid px-0">
