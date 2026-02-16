@@ -1,0 +1,128 @@
+/* Custom Styles */
+body {
+  background-color: #f8f9fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+}
+
+.sidebar .nav-link {
+  border-radius: 5px;
+  margin: 2px 0;
+  transition: all 0.3s;
+}
+
+.sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar .nav-link.active {
+  background-color: #0d6efd !important;
+}
+
+.content-wrapper {
+  min-height: 100vh;
+  transition: all 0.3s;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.card-header {
+  background-color: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.btn {
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+}
+
+/* Dashboard Cards */
+.bg-primary {
+  background: linear-gradient(45deg, #0d6efd, #0b5ed7) !important;
+}
+
+.bg-success {
+  background: linear-gradient(45deg, #198754, #157347) !important;
+}
+
+.bg-warning {
+  background: linear-gradient(45deg, #ffc107, #ffb006) !important;
+}
+
+.bg-info {
+  background: linear-gradient(45deg, #0dcaf0, #0bacd0) !important;
+}
+
+/* Form Styles */
+.form-control,
+.form-select {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Modal Styles */
+.modal-content {
+  border-radius: 10px;
+  border: none;
+}
+
+.modal-header {
+  border-bottom: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  border-radius: 10px 10px 0 0;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  border-radius: 0 0 10px 10px;
+}
+
+/* Alert Styles */
+.alert {
+  border-radius: 10px;
+  border: none;
+}
+
+/* Loading Spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .content-wrapper {
+    margin-left: 0 !important;
+  }
+}
