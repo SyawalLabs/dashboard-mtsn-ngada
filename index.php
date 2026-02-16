@@ -4,34 +4,27 @@ include 'includes/header.php';
 include 'includes/sidebar.php';
 
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
-switch ($page) {
-    case 'dashboard':
-        include 'pages/dashboard.php';
-        break;
-    case 'jadwal':
-        include 'pages/jadwal/index.php';
-        break;
-    case 'nilai':
-        include 'pages/nilai/index.php';
-        break;
-    case 'siswa':
-        include 'pages/siswa/index.php';
-        break;
-    case 'guru':
-        include 'pages/guru/index.php';
-        break;
-    case 'mapel':
-        include 'pages/mapel/index.php';
-        break;
-    case 'kelas':
-        include 'pages/kelas/index.php';
-        break;
-    case 'laporan':
-        include 'pages/laporan/index.php';
-        break;
-    default:
-        include 'pages/dashboard.php';
+// Cek file exist
+$base_path = 'pages/';
+$file_path = '';
+
+if ($action) {
+    $file_path = $base_path . $page . '/' . $action . '.php';
+} else {
+    $file_path = $base_path . $page . '/index.php';
+}
+
+if (file_exists($file_path)) {
+    include $file_path;
+} else {
+    // Fallback ke file sederhana
+    if ($page == 'dashboard') {
+        include $base_path . 'dashboard.php';
+    } else {
+        echo '<div class="alert alert-warning">Halaman dalam pengembangan</div>';
+    }
 }
 
 include 'includes/footer.php';

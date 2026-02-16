@@ -1,101 +1,104 @@
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">
-            <i class="fas fa-school me-2"></i>Sistem Akademik
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user-circle me-1"></i> <?php echo $_SESSION['username']; ?>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Pengaturan</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item text-danger" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
 <!-- Sidebar -->
-<div class="d-flex">
-    <div class="bg-dark text-white sidebar vh-100 position-fixed" style="width: 250px; margin-top: 56px;">
-        <div class="p-3">
-            <div class="text-center mb-4">
-                <img src="assets/img/logo.png" alt="Logo" class="img-fluid rounded-circle" style="width: 80px;">
-                <h5 class="mt-2">SMA Negeri 1</h5>
-                <small>Akreditasi A</small>
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h5 class="mb-0"><i class="bi bi-building"></i> MTsN Ngada</h5>
+        <small class="text-white-50">Akreditasi A</small>
+    </div>
+
+    <div class="sidebar-menu">
+        <?php
+        $current_page = $_GET['page'] ?? 'dashboard';
+        ?>
+        <a href="index.php?page=dashboard" class="<?php echo $current_page == 'dashboard' ? 'active' : ''; ?>">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="index.php?page=jadwal" class="<?php echo $current_page == 'jadwal' ? 'active' : ''; ?>">
+            <i class="bi bi-calendar-week"></i>
+            <span>Jadwal</span>
+        </a>
+
+        <a href="index.php?page=nilai" class="<?php echo $current_page == 'nilai' ? 'active' : ''; ?>">
+            <i class="bi bi-star-fill"></i>
+            <span>Nilai</span>
+        </a>
+
+        <a href="index.php?page=siswa" class="<?php echo $current_page == 'siswa' ? 'active' : ''; ?>">
+            <i class="bi bi-people-fill"></i>
+            <span>Siswa</span>
+        </a>
+
+        <a href="index.php?page=guru" class="<?php echo $current_page == 'guru' ? 'active' : ''; ?>">
+            <i class="bi bi-person-badge"></i>
+            <span>Guru</span>
+        </a>
+
+        <a href="index.php?page=mapel" class="<?php echo $current_page == 'mapel' ? 'active' : ''; ?>">
+            <i class="bi bi-book-fill"></i>
+            <span>Mata Pelajaran</span>
+        </a>
+
+        <a href="index.php?page=kelas" class="<?php echo $current_page == 'kelas' ? 'active' : ''; ?>">
+            <i class="bi bi-door-open-fill"></i>
+            <span>Kelas</span>
+        </a>
+
+        <a href="index.php?page=laporan" class="<?php echo $current_page == 'laporan' ? 'active' : ''; ?>">
+            <i class="bi bi-file-text-fill"></i>
+            <span>Laporan</span>
+        </a>
+
+        <hr class="bg-secondary">
+
+        <a href="index.php?page=pengaturan" class="<?php echo $current_page == 'pengaturan' ? 'active' : ''; ?>">
+            <i class="bi bi-gear-fill"></i>
+            <span>Pengaturan</span>
+        </a>
+
+        <a href="logout.php" class="text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+
+    <div class="sidebar-footer p-3 text-center text-white-50 small">
+        <i class="bi bi-person-circle"></i> <?php echo $_SESSION['username']; ?> (<?php echo $_SESSION['role']; ?>)
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+    <!-- Navbar Top -->
+    <div class="navbar-top">
+        <button class="menu-toggle" id="menuToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        <h4 class="mb-0" id="pageTitle">
+            <?php
+            $page = $_GET['page'] ?? 'dashboard';
+            echo ucfirst($page);
+            ?>
+        </h4>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted d-none d-md-block">
+                <i class="bi bi-calendar"></i> <?php echo date('d/m/Y'); ?>
+            </span>
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profil</a></li>
+                    <li><a class="dropdown-item" href="index.php?page=pengaturan"><i class="bi bi-gear"></i> Pengaturan</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-danger" href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                </ul>
             </div>
-
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item mb-2">
-                    <a href="index.php?page=dashboard" class="nav-link text-white <?php echo ($_GET['page'] ?? 'dashboard') == 'dashboard' ? 'active bg-primary' : ''; ?>">
-                        <i class="fas fa-home me-2"></i>Dashboard
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="index.php?page=jadwal" class="nav-link text-white <?php echo ($_GET['page'] ?? '') == 'jadwal' ? 'active bg-primary' : ''; ?>">
-                        <i class="fas fa-calendar-alt me-2"></i>Jadwal
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="index.php?page=nilai" class="nav-link text-white <?php echo ($_GET['page'] ?? '') == 'nilai' ? 'active bg-primary' : ''; ?>">
-                        <i class="fas fa-star me-2"></i>Nilai
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="index.php?page=siswa" class="nav-link text-white <?php echo ($_GET['page'] ?? '') == 'siswa' ? 'active bg-primary' : ''; ?>">
-                        <i class="fas fa-users me-2"></i>Siswa
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="index.php?page=guru" class="nav-link text-white <?php echo ($_GET['page'] ?? '') == 'guru' ? 'active bg-primary' : ''; ?>">
-                        <i class="fas fa-chalkboard-teacher me-2"></i>Guru
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="index.php?page=mapel" class="nav-link text-white <?php echo ($_GET['page'] ?? '') == 'mapel' ? 'active bg-primary' : ''; ?>">
-                        <i class="fas fa-book me-2"></i>Mata Pelajaran
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="index.php?page=kelas" class="nav-link text-white <?php echo ($_GET['page'] ?? '') == 'kelas' ? 'active bg-primary' : ''; ?>">
-                        <i class="fas fa-door-open me-2"></i>Kelas
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="index.php?page=laporan" class="nav-link text-white <?php echo ($_GET['page'] ?? '') == 'laporan' ? 'active bg-primary' : ''; ?>">
-                        <i class="fas fa-file-alt me-2"></i>Laporan
-                    </a>
-                </li>
-
-                <hr class="bg-secondary">
-
-                <li class="nav-item mb-2">
-                    <a href="logout.php" class="nav-link text-white text-danger">
-                        <i class="fas fa-sign-out-alt me-2"></i>Logout
-                    </a>
-                </li>
-            </ul>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="content-wrapper" style="margin-left: 250px; margin-top: 56px; width: 100%; padding: 20px;">
+    <!-- Content Area -->
+    <div id="contentArea">

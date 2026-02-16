@@ -1,163 +1,181 @@
-<div class="container-fluid">
-    <h2 class="mb-4">Dashboard</h2>
+<div class="container-fluid px-0">
+    <!-- Welcome Banner -->
+    <div class="alert alert-primary d-flex align-items-center mb-4">
+        <i class="bi bi-info-circle-fill me-2 fs-4"></i>
+        <div>
+            <strong>Selamat datang, <?php echo $_SESSION['username']; ?>!</strong> di Sistem Akademik MTs Negeri Ngada
+        </div>
+    </div>
 
-    <!-- Statistik Cards -->
-    <div class="row mb-4">
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
         <?php
-        // Total Siswa
-        $result = $db->query("SELECT COUNT(*) as total FROM siswa");
-        $totalSiswa = $result->fetch_assoc()['total'];
-
-        // Total Guru
-        $result = $db->query("SELECT COUNT(*) as total FROM guru");
-        $totalGuru = $result->fetch_assoc()['total'];
-
-        // Total Mapel
-        $result = $db->query("SELECT COUNT(*) as total FROM mapel");
-        $totalMapel = $result->fetch_assoc()['total'];
-
-        // Total Kelas
-        $result = $db->query("SELECT COUNT(*) as total FROM kelas");
-        $totalKelas = $result->fetch_assoc()['total'];
+        // Hitung total
+        $totalSiswa = $db->query("SELECT COUNT(*) as total FROM siswa")->fetch_assoc()['total'];
+        $totalGuru = $db->query("SELECT COUNT(*) as total FROM guru")->fetch_assoc()['total'];
+        $totalMapel = $db->query("SELECT COUNT(*) as total FROM mapel")->fetch_assoc()['total'];
+        $totalKelas = $db->query("SELECT COUNT(*) as total FROM kelas")->fetch_assoc()['total'];
         ?>
 
-        <div class="col-md-3 mb-3">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Total Siswa</h6>
-                            <h2 class="mb-0"><?php echo $totalSiswa; ?></h2>
-                        </div>
-                        <i class="fas fa-users fa-3x opacity-50"></i>
-                    </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Total Siswa</small>
+                    <h3 class="mb-0"><?php echo $totalSiswa; ?></h3>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Total Guru</h6>
-                            <h2 class="mb-0"><?php echo $totalGuru; ?></h2>
-                        </div>
-                        <i class="fas fa-chalkboard-teacher fa-3x opacity-50"></i>
-                    </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-success bg-opacity-10 text-success">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Total Guru</small>
+                    <h3 class="mb-0"><?php echo $totalGuru; ?></h3>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="card bg-warning text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Mata Pelajaran</h6>
-                            <h2 class="mb-0"><?php echo $totalMapel; ?></h2>
-                        </div>
-                        <i class="fas fa-book fa-3x opacity-50"></i>
-                    </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                    <i class="bi bi-book-fill"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Mata Pelajaran</small>
+                    <h3 class="mb-0"><?php echo $totalMapel; ?></h3>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="card bg-info text-white">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-info bg-opacity-10 text-info">
+                    <i class="bi bi-door-open-fill"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Total Kelas</small>
+                    <h3 class="mb-0"><?php echo $totalKelas; ?></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Aksi Cepat</h5>
+                </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Total Kelas</h6>
-                            <h2 class="mb-0"><?php echo $totalKelas; ?></h2>
+                    <div class="row g-2">
+                        <div class="col-6 col-md-3">
+                            <a href="index.php?page=siswa&action=tambah" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-person-plus"></i> <span class="d-none d-md-inline">Tambah Siswa</span>
+                            </a>
                         </div>
-                        <i class="fas fa-door-open fa-3x opacity-50"></i>
+                        <div class="col-6 col-md-3">
+                            <a href="index.php?page=nilai&action=input" class="btn btn-outline-success w-100">
+                                <i class="bi bi-pencil-square"></i> <span class="d-none d-md-inline">Input Nilai</span>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <a href="index.php?page=jadwal&action=tambah" class="btn btn-outline-warning w-100">
+                                <i class="bi bi-calendar-plus"></i> <span class="d-none d-md-inline">Tambah Jadwal</span>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <a href="index.php?page=laporan" class="btn btn-outline-info w-100">
+                                <i class="bi bi-printer"></i> <span class="d-none d-md-inline">Cetak Laporan</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Grafik dan Jadwal -->
-    <div class="row">
-        <div class="col-md-8 mb-4">
+    <!-- Jadwal Hari Ini & Info -->
+    <div class="row g-3">
+        <div class="col-md-8">
             <div class="card">
-                <div class="card-header">
-                    <h5>Grafik Perkembangan Nilai</h5>
-                </div>
-                <div class="card-body">
-                    <canvas id="nilaiChart" style="height: 300px;"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Jadwal Hari Ini</h5>
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="bi bi-calendar-check text-primary me-2"></i>Jadwal Hari Ini</h5>
                 </div>
                 <div class="card-body">
                     <?php
-                    $hari = date('l');
-                    $hariIndo = [
+                    $hari = [
+                        'Sunday' => 'Minggu',
                         'Monday' => 'Senin',
                         'Tuesday' => 'Selasa',
                         'Wednesday' => 'Rabu',
                         'Thursday' => 'Kamis',
                         'Friday' => 'Jumat',
-                        'Saturday' => 'Sabtu',
-                        'Sunday' => 'Minggu'
+                        'Saturday' => 'Sabtu'
                     ];
+                    $hariIni = $hari[date('l')];
 
-                    $hariIni = $hariIndo[$hari];
+                    $jadwal = $db->query("SELECT j.*, m.nama_mapel, k.nama_kelas, g.nama as guru 
+                                          FROM jadwal j 
+                                          JOIN mapel m ON j.mapel_id = m.id 
+                                          JOIN kelas k ON j.kelas_id = k.id 
+                                          JOIN guru g ON j.guru_id = g.id 
+                                          WHERE j.hari = '$hariIni'
+                                          ORDER BY j.jam_mulai");
 
-                    $query = "SELECT j.*, m.nama_mapel, k.nama_kelas, g.nama as nama_guru 
-                              FROM jadwal j 
-                              JOIN mapel m ON j.mapel_id = m.id 
-                              JOIN kelas k ON j.kelas_id = k.id 
-                              JOIN guru g ON j.guru_id = g.id 
-                              WHERE j.hari = '$hariIni'
-                              ORDER BY j.jam_mulai";
-
-                    $result = $db->query($query);
-
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                    ?>
-                            <div class="alert alert-info mb-2">
-                                <small><?php echo date('H:i', strtotime($row['jam_mulai'])) . ' - ' . date('H:i', strtotime($row['jam_selesai'])); ?></small>
-                                <h6 class="mb-0"><?php echo $row['nama_mapel']; ?></h6>
-                                <small>Kelas <?php echo $row['nama_kelas']; ?> - <?php echo $row['nama_guru']; ?></small>
-                            </div>
-                    <?php
+                    if ($jadwal->num_rows > 0) {
+                        echo '<div class="list-group">';
+                        while ($row = $jadwal->fetch_assoc()) {
+                            echo '<div class="list-group-item d-flex justify-content-between align-items-center">';
+                            echo '<div>';
+                            echo '<small class="text-primary">' . date('H:i', strtotime($row['jam_mulai'])) . ' - ' . date('H:i', strtotime($row['jam_selesai'])) . '</small>';
+                            echo '<h6 class="mb-0">' . $row['nama_mapel'] . ' - Kelas ' . $row['nama_kelas'] . '</h6>';
+                            echo '<small class="text-muted"><i class="bi bi-person"></i> ' . $row['guru'] . ' | <i class="bi bi-door-open"></i> ' . $row['ruangan'] . '</small>';
+                            echo '</div>';
+                            echo '<span class="badge bg-primary">' . $row['hari'] . '</span>';
+                            echo '</div>';
                         }
+                        echo '</div>';
                     } else {
-                        echo "<p class='text-muted'>Tidak ada jadwal hari ini</p>";
+                        echo '<p class="text-muted text-center py-4"><i class="bi bi-calendar-x"></i> Tidak ada jadwal hari ini</p>';
                     }
                     ?>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle text-info me-2"></i>Informasi</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-building"></i> Sekolah</span>
+                            <span class="fw-bold"><?php echo $_SESSION['sekolah']['nama']; ?></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-calendar"></i> Tahun Ajaran</span>
+                            <span class="fw-bold">2024/2025</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-sun"></i> Semester</span>
+                            <span class="fw-bold">Ganjil</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-person"></i> Login sebagai</span>
+                            <span class="fw-bold text-primary"><?php echo $_SESSION['role']; ?></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<script>
-    // Grafik Nilai
-    const ctx = document.getElementById('nilaiChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
-            datasets: [{
-                label: 'Rata-rata Nilai',
-                data: [75, 78, 80, 82, 85, 83],
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-</script>

@@ -1,50 +1,50 @@
 <?php
+// Pastikan tidak ada spasi sebelum <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nis = $db->escape_string($_POST['nis']);
-    $nisn = $db->escape_string($_POST['nisn']);
-    $nama = $db->escape_string($_POST['nama']);
-    $kelas_id = $_POST['kelas_id'];
-    $jk = $_POST['jenis_kelamin'];
-    $tmpt_lahir = $db->escape_string($_POST['tempat_lahir']);
-    $tgl_lahir = $_POST['tanggal_lahir'];
-    $alamat = $db->escape_string($_POST['alamat']);
-    $nama_ayah = $db->escape_string($_POST['nama_ayah']);
-    $nama_ibu = $db->escape_string($_POST['nama_ibu']);
+    include '../../config/database.php';
 
-    $query = "INSERT INTO siswa (nis, nisn, nama, kelas_id, jenis_kelamin, tempat_lahir, tanggal_lahir, alamat, nama_ayah, nama_ibu) 
-              VALUES ('$nis', '$nisn', '$nama', $kelas_id, '$jk', '$tmpt_lahir', '$tgl_lahir', '$alamat', '$nama_ayah', '$nama_ibu')";
+    $nis = $db->escape_string($_POST['nis']);
+    $nama = $db->escape_string($_POST['nama']);
+    $kelas_id = $_POST['kelas_id'] ?: 'NULL';
+    $jk = $_POST['jk'];
+
+    $query = "INSERT INTO siswa (nis, nama, kelas_id, jenis_kelamin) 
+              VALUES ('$nis', '$nama', $kelas_id, '$jk')";
 
     if ($db->query($query)) {
-        $_SESSION['success'] = "Data siswa berhasil ditambahkan";
-        header("Location: index.php?page=siswa");
+        session_start();
+        $_SESSION['success'] = "Siswa berhasil ditambahkan";
+        header("Location: ../index.php?page=siswa");
+        exit();
     } else {
-        $_SESSION['error'] = "Gagal menambahkan data: " . $db->conn->error;
-        header("Location: index.php?page=siswa&action=tambah");
+        session_start();
+        $_SESSION['error'] = "Gagal: " . $db->conn->error;
+        header("Location: ../index.php?page=siswa&action=tambah");
+        exit();
     }
-    exit();
 }
+
+// Jika bukan POST, tampilkan form
+include '../../config/database.php';
+include '../../includes/header.php';
+include '../../includes/sidebar.php';
 ?>
 
-<div class="container-fluid">
+<div class="container-fluid px-0">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Tambah Siswa</h2>
+        <h4><i class="bi bi-person-plus me-2"></i>Tambah Siswa</h4>
         <a href="index.php?page=siswa" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Kembali
+            <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
 
     <div class="card">
         <div class="card-body">
-            <form method="POST" action="">
+            <form method="POST" onsubmit="showLoading()">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label">NIS <span class="text-danger">*</span></label>
                         <input type="text" name="nis" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">NISN</label>
-                        <input type="text" name="nisn" class="form-control">
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -67,35 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="form-control">
+                        <select name="jk" class="form-control">
                             <option value="L">Laki-laki</option>
                             <option value="P">Perempuan</option>
                         </select>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tempat Lahir</label>
-                        <input type="text" name="tempat_lahir" class="form-control">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="form-control">
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label class="form-label">Alamat</label>
-                        <textarea name="alamat" class="form-control" rows="3"></textarea>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nama Ayah</label>
-                        <input type="text" name="nama_ayah" class="form-control">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nama Ibu</label>
-                        <input type="text" name="nama_ibu" class="form-control">
                     </div>
                 </div>
 
@@ -107,3 +82,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
+
+<?php include '../../includes/footer.php'; ?>
