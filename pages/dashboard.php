@@ -163,15 +163,49 @@
                         </div>
                         <div class="list-group-item d-flex justify-content-between">
                             <span><i class="bi bi-calendar"></i> Tahun Ajaran</span>
-                            <span class="fw-bold">2024/2025</span>
+                            <span class="fw-bold">
+                                <?php
+                                // Cek apakah ada data tahun ajaran di session
+                                if (isset($_SESSION['tahun_ajaran'])) {
+                                    echo $_SESSION['tahun_ajaran'];
+                                } else {
+                                    // Otomatis berdasarkan bulan
+                                    $bulan = date('n');
+                                    $tahun = date('Y');
+                                    $ta = ($bulan >= 7) ? $tahun . '/' . ($tahun + 1) : ($tahun - 1) . '/' . $tahun;
+                                    echo $ta;
+                                }
+                                ?>
+                            </span>
                         </div>
                         <div class="list-group-item d-flex justify-content-between">
                             <span><i class="bi bi-sun"></i> Semester</span>
-                            <span class="fw-bold">Ganjil</span>
+                            <span class="fw-bold">
+                                <?php
+                                // Cek apakah ada data semester di session
+                                if (isset($_SESSION['semester'])) {
+                                    echo $_SESSION['semester'];
+                                } else {
+                                    // Otomatis berdasarkan bulan
+                                    $bulan = date('n');
+                                    $semester = ($bulan >= 7) ? 'Ganjil' : 'Genap';
+                                    echo $semester;
+                                }
+                                ?>
+                            </span>
                         </div>
                         <div class="list-group-item d-flex justify-content-between">
                             <span><i class="bi bi-person"></i> Login sebagai</span>
-                            <span class="fw-bold text-primary"><?php echo $_SESSION['role']; ?></span>
+                            <span class="fw-bold text-primary">
+                                <?php
+                                // Format role agar lebih rapi
+                                $role = $_SESSION['role'];
+                                if ($role == 'admin') echo 'Administrator';
+                                elseif ($role == 'guru') echo 'Guru';
+                                elseif ($role == 'siswa') echo 'Siswa';
+                                else echo ucfirst($role);
+                                ?>
+                            </span>
                         </div>
                     </div>
                 </div>

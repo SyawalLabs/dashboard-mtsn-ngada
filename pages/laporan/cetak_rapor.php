@@ -1,23 +1,45 @@
 <?php
-include_once 'config/database.php';
+session_start();
+require_once '../../config/database.php';
 
-$siswa_id = $_GET['siswa_id'];
-$semester = $_GET['semester'];
-$tahun_ajaran = $_GET['tahun_ajaran'];
+$siswa_id = isset($_GET['siswa_id']) ? (int)$_GET['siswa_id'] : 0;
+$semester = isset($_GET['semester']) ? $db->escape_string($_GET['semester']) : '';
+$tahun_ajaran = isset($_GET['tahun_ajaran']) ? $db->escape_string($_GET['tahun_ajaran']) : '';
+
+if ($siswa_id <= 0 || empty($semester) || empty($tahun_ajaran)) {
+    echo '<p>Parameter cetak rapor tidak lengkap.</p>';
+    exit();
+}
 
 // Ambil data siswa
-$siswa = $db->query("SELECT s.*, k.nama_kelas, k.wali_kelas 
+$siswa_q = $db->query("SELECT s.*, k.nama_kelas, k.wali_kelas 
                      FROM siswa s 
                      JOIN kelas k ON s.kelas_id = k.id 
-                     WHERE s.id = $siswa_id")->fetch_assoc();
+                     WHERE s.id = $siswa_id");
+
+if (!$siswa_q || $siswa_q->num_rows == 0) {
+    echo '<p>Data siswa tidak ditemukan.</p>';
+    exit();
+}
+
+$siswa = $siswa_q->fetch_assoc();
 
 // Ambil data nilai
-$nilai = $db->query("SELECT n.*, m.nama_mapel, m.kkm 
+$nilai_q = $db->query("SELECT n.*, m.nama_mapel, m.kkm 
                      FROM nilai n 
                      JOIN mapel m ON n.mapel_id = m.id 
                      WHERE n.siswa_id = $siswa_id 
                      AND n.semester = '$semester' 
                      AND n.tahun_ajaran = '$tahun_ajaran'");
+
+if (!$nilai_q) {
+    $nilai_rows = [];
+} else {
+    $nilai_rows = [];
+    while ($r = $nilai_q->fetch_assoc()) {
+        $nilai_rows[] = $r;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -182,8 +204,13 @@ $nilai = $db->query("SELECT n.*, m.nama_mapel, m.kkm
             $total_nilai = 0;
             $jumlah_mapel = 0;
 
-            while ($row = $nilai->fetch_assoc()) {
-                $rata2 = ($row['uh'] + $row['uts'] + $row['uas'] + $row['tugas']) / 4;
+            foreach ($nilai_rows as $row) {
+                $uh = isset($row['uh']) ? floatval($row['uh']) : 0;
+                $uts = isset($row['uts']) ? floatval($row['uts']) : 0;
+                $uas = isset($row['uas']) ? floatval($row['uas']) : 0;
+                $tugas = isset($row['tugas']) ? floatval($row['tugas']) : 0;
+
+                $rata2 = ($uh + $uts + $uas + $tugas) / 4;
                 $total_nilai += $rata2;
                 $jumlah_mapel++;
 
@@ -194,16 +221,17 @@ $nilai = $db->query("SELECT n.*, m.nama_mapel, m.kkm
                 elseif ($rata2 >= 60) $predikat = 'D';
                 else $predikat = 'E';
 
-                $status = $rata2 >= $row['kkm'] ? 'Tuntas' : 'Remidi';
+                $kkm = isset($row['kkm']) ? floatval($row['kkm']) : 0;
+                $status = $rata2 >= $kkm ? 'Tuntas' : 'Remidi';
             ?>
                 <tr>
                     <td><?php echo $no++; ?></td>
-                    <td align="left"><?php echo $row['nama_mapel']; ?></td>
-                    <td><?php echo $row['kkm']; ?></td>
-                    <td><?php echo $row['uh']; ?></td>
-                    <td><?php echo $row['uts']; ?></td>
-                    <td><?php echo $row['uas']; ?></td>
-                    <td><?php echo $row['tugas']; ?></td>
+                    <td align="left"><?php echo htmlspecialchars($row['nama_mapel']); ?></td>
+                    <td><?php echo htmlspecialchars($row['kkm']); ?></td>
+                    <td><?php echo htmlspecialchars($row['uh']); ?></td>
+                    <td><?php echo htmlspecialchars($row['uts']); ?></td>
+                    <td><?php echo htmlspecialchars($row['uas']); ?></td>
+                    <td><?php echo htmlspecialchars($row['tugas']); ?></td>
                     <td><strong><?php echo number_format($rata2, 2); ?></strong></td>
                     <td><?php echo $predikat; ?></td>
                     <td><?php echo $status; ?></td>

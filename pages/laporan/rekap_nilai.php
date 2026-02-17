@@ -1,3 +1,11 @@
+<?php
+// Jika file di-include dari index.php, $db sudah ada. Jika dibuka langsung (target _blank), siapkan DB dan session.
+if (!isset($db)) {
+    session_start();
+    require_once '../../config/database.php';
+}
+
+?>
 <div class="container-fluid">
     <h2 class="mb-4"><i class="bi bi-file-earmark-pdf"></i> Rekap Nilai Per Kelas</h2>
 
@@ -61,30 +69,49 @@
                     Rekap Nilai Kelas <?php echo $kelas_data['nama_kelas']; ?><br>
                     <small class="text-muted">Semester <?php echo $semester; ?> - Tahun Ajaran <?php echo $tahun_ajaran; ?></small>
                 </h5>
+                <?php
+                // Ambil daftar mapel satu kali untuk header dan perhitungan
+                $mapel = $db->query("SELECT * FROM mapel ORDER BY id");
+                $mapelList = [];
+                while ($m = $mapel->fetch_assoc()) {
+                    $mapelList[] = $m;
+                }
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-sm">
-                        <thead class="table-light">
-                            <tr>
-                                <th>No</th>
-                                <th>NIS</th>
-                                <th>Nama Siswa</th>
-                                <th colspan="5" class="text-center">Mata Pelajaran</th>
-                                <th>Rata-rata</th>
-                                <th>Peringkat</th>
-                            </tr>
-                            <tr class="table-secondary">
-                                <?php
-                                $mapel = $db->query("SELECT * FROM mapel ORDER BY id");
-                                $mapelList = [];
-                                while ($m = $mapel->fetch_assoc()) {
-                                    $mapelList[] = $m;
-                                    echo "<th style='text-align: center; font-size: 0.9rem;'>" . substr($m['nama_mapel'], 0, 10) . "</th>";
-                                }
-                                ?>
-                            </tr>
-                        </thead>
-                        <tbody>
+                if (count($mapelList) == 0) {
+                    echo '<div class="alert alert-warning">Data mata pelajaran belum tersedia.</div>';
+                } else {
+                ?>
+                    <div class="d-flex justify-content-end mb-3 gap-2">
+                        <a href="pages/laporan/export_rekap.php?kelas_id=<?php echo rawurlencode($kelas_id); ?>&semester=<?php echo rawurlencode($semester); ?>&tahun_ajaran=<?php echo rawurlencode($tahun_ajaran); ?>" target="_blank" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-download"></i> Ekspor CSV
+                        </a>
+                        <button class="btn btn-success btn-sm" onclick="window.print()"><i class="bi bi-printer"></i> Cetak</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>NIS</th>
+                                    <th>Nama Siswa</th>
+                                    <th colspan="<?php echo count($mapelList); ?>" class="text-center">Mata Pelajaran</th>
+                                    <th>Rata-rata</th>
+                                    <th>Peringkat</th>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <?php
+                                    // Tampilkan header singkatan mapel
+                                    foreach ($mapelList as $m) {
+                                        // gunakan title untuk nama penuh dan singkatan di tampilan
+                                        $short = htmlspecialchars(substr($m['nama_mapel'], 0, 12));
+                                        $full = htmlspecialchars($m['nama_mapel']);
+                                        echo "<th style='text-align: center; font-size: 0.9rem;' title='{$full}'>" . $short . "</th>";
+                                    }
+                                    ?>
+                                </tr>
+                            </thead>
+                            <tbody>
                             <?php
                             $siswa = $db->query("SELECT * FROM siswa WHERE kelas_id = $kelas_id ORDER BY nama");
                             $no = 1;
@@ -96,16 +123,21 @@
                                 $nilaiPerMapel = [];
 
                                 foreach ($mapelList as $m) {
-                                    $nilai = $db->query("SELECT (uh + uts + uas + IFNULL(tugas, 0)) / 4 as rata FROM nilai 
+                                    $nilai_q = $db->query("SELECT (uh + uts + uas + IFNULL(tugas, 0)) / 4 as rata, uh, uts, uas, tugas FROM nilai 
                                                         WHERE siswa_id = {$s['id']} AND mapel_id = {$m['id']} 
                                                         AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran'");
-                                    $row = $nilai->fetch_assoc();
-                                    $rata = $row['rata'] ? floatval($row['rata']) : 0;
-                                    $nilaiPerMapel[] = $rata;
 
-                                    if ($row['rata']) {
-                                        $totalNilai += $row['rata'];
-                                        $jumlahMapel++;
+                                    if ($nilai_q && $row = $nilai_q->fetch_assoc()) {
+                                        $rata = isset($row['rata']) ? floatval($row['rata']) : 0;
+                                        $nilaiPerMapel[] = $rata;
+
+                                        if (isset($row['rata']) && $row['rata'] !== null) {
+                                            $totalNilai += floatval($row['rata']);
+                                            $jumlahMapel++;
+                                        }
+                                    } else {
+                                        // Tidak ada nilai untuk mapel ini
+                                        $nilaiPerMapel[] = 0;
                                     }
                                 }
 
@@ -127,19 +159,22 @@
                             foreach ($dataNilai as $key => $data) {
                                 echo "<tr>";
                                 echo "<td>" . ($key + 1) . "</td>";
-                                echo "<td>{$data['nis']}</td>";
-                                echo "<td>{$data['nama']}</td>";
-                                foreach ($data['nilai'] as $n) {
+                                echo "<td>" . htmlspecialchars($data['nis']) . "</td>";
+                                echo "<td>" . htmlspecialchars($data['nama']) . "</td>";
+                                // pastikan jumlah kolom nilai sama dengan jumlah mapel
+                                foreach ($mapelList as $i => $m) {
+                                    $n = isset($data['nilai'][$i]) ? $data['nilai'][$i] : 0;
                                     echo "<td style='text-align: center;'>" . ($n > 0 ? number_format($n, 1) : '-') . "</td>";
                                 }
                                 echo "<td><strong>" . number_format($data['rata'], 2) . "</strong></td>";
-                                echo "<td style='text-align: center;'><strong>" . ($key + 1) . "</strong></td>";
+                                echo "<td style='text-align: center;'><span class='badge bg-primary'>" . ($key + 1) . "</span></td>";
                                 echo "</tr>";
                             }
+                        }
                             ?>
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
             </div>
         </div>
     <?php endif; ?>

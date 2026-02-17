@@ -26,6 +26,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Jika POST tapi file tidak exist, skip include
 }
 
+// Process GET action handlers (SEBELUM header.php) —
+// ini memastikan file action seperti 'hapus' dapat melakukan header() redirect
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && $action) {
+    if (file_exists($file_path)) {
+        // Jalankan aksi tanpa mengeluarkan output sehingga header() bisa dipanggil
+        ob_start();
+        include $file_path;
+        ob_end_clean();
+        // Jika file action melakukan redirect/exit, eksekusi sudah berhenti.
+        // Jika tidak, lanjutkan ke tampilan normal.
+    }
+}
+
 // Include header dan sidebar HANYA untuk display (GET requests)
 include 'includes/header.php';
 include 'includes/sidebar.php';
