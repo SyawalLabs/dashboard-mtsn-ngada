@@ -1,16 +1,17 @@
 <?php
-include_once 'config/database.php';
+session_start();
 
-$id = $_GET['id'];
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-$query = "DELETE FROM nilai WHERE id = $id";
-
-if ($db->query($query)) {
-    session_start();
-    $_SESSION['success'] = "Nilai berhasil dihapus";
+if ($id > 0) {
+    $query = "DELETE FROM nilai WHERE id = $id";
+    if ($db->query($query)) {
+        $_SESSION['success'] = "Nilai berhasil dihapus";
+    } else {
+        $_SESSION['error'] = "Gagal: " . $db->conn->error;
+    }
 } else {
-    session_start();
-    $_SESSION['error'] = "Gagal menghapus: " . $db->conn->error;
+    $_SESSION['error'] = "ID tidak valid";
 }
 
 header("Location: ../index.php?page=nilai");

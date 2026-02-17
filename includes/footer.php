@@ -81,6 +81,19 @@
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
+        <?php if (isset($_SESSION['warning'])): ?>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan!',
+                html: '<?php echo $_SESSION['warning']; ?><?php if (isset($_SESSION['error_details']) && !empty($_SESSION['error_details'])): ?><br><br><small><?php foreach ($_SESSION['error_details'] as $err) {
+                                                                                                                                                                    echo htmlspecialchars($err) . "<br>";
+                                                                                                                                                                } ?></small><?php endif; ?>',
+                confirmButtonText: 'OK'
+            });
+            <?php unset($_SESSION['warning']); ?>
+            <?php unset($_SESSION['error_details']); ?>
+        <?php endif; ?>
+
         // Confirm delete
         function confirmDelete(url, message = 'Data akan dihapus permanent!') {
             Swal.fire({

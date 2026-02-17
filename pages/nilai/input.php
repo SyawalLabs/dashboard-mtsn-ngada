@@ -1,13 +1,13 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $siswa_id = $_POST['siswa_id'];
-    $mapel_id = $_POST['mapel_id'];
-    $uh = $_POST['uh'];
-    $uts = $_POST['uts'];
-    $uas = $_POST['uas'];
-    $tugas = $_POST['tugas'] ?? [];
-    $semester = $_POST['semester'];
-    $tahun_ajaran = $_POST['tahun_ajaran'];
+    $siswa_id = isset($_POST['siswa_id']) && is_array($_POST['siswa_id']) ? $_POST['siswa_id'] : [];
+    $mapel_id = isset($_POST['mapel_id']) ? $_POST['mapel_id'] : null;
+    $uh = isset($_POST['uh']) && is_array($_POST['uh']) ? $_POST['uh'] : [];
+    $uts = isset($_POST['uts']) && is_array($_POST['uts']) ? $_POST['uts'] : [];
+    $uas = isset($_POST['uas']) && is_array($_POST['uas']) ? $_POST['uas'] : [];
+    $tugas = isset($_POST['tugas']) && is_array($_POST['tugas']) ? $_POST['tugas'] : [];
+    $semester = isset($_POST['semester']) ? $_POST['semester'] : null;
+    $tahun_ajaran = isset($_POST['tahun_ajaran']) ? $_POST['tahun_ajaran'] : null;
 
     $success = true;
 

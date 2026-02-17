@@ -21,39 +21,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ob_start();
         include $file_path;
         ob_end_clean();
-        // Jika handler tidak exit, script tetap lanjut - tapi output sudah di-discard
+        // POST handler harus exit/redirect, tapi output sudah di-discard
     }
-    // Jika POST tapi file tidak exist, skip include
+    // Script execution should stop here if handler called exit()
+    // Jika tidak, skip include header dan langsung keluar
+    exit();
 }
 
-// Process GET action handlers (SEBELUM header.php) —
-// ini memastikan file action seperti 'hapus' dapat melakukan header() redirect
+// Process GET action handlers (SEBELUM header.php)
+// Ini memastikan file action seperti 'hapus' dapat melakukan header() redirect
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && $action) {
     if (file_exists($file_path)) {
         // Jalankan aksi tanpa mengeluarkan output sehingga header() bisa dipanggil
         ob_start();
-        include $file_path;
+        @include $file_path;
         ob_end_clean();
         // Jika file action melakukan redirect/exit, eksekusi sudah berhenti.
-        // Jika tidak, lanjutkan ke tampilan normal.
+        // Jika tidak, fall through ke tampilan normal.
     }
 }
 
-// Include header dan sidebar HANYA untuk display (GET requests)
+// Include header dan sidebar HANYA untuk GET display requests
+// (bukan POST, dan juga bukan GET actions yang sudah exit)
 include 'includes/header.php';
 include 'includes/sidebar.php';
 
-// Display content HANYA untuk GET requests
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    if (file_exists($file_path)) {
-        include $file_path;
+// Display content
+if (file_exists($file_path)) {
+    include $file_path;
+} else {
+    // Fallback ke file sederhana
+    if ($page == 'dashboard') {
+        include $base_path . 'dashboard.php';
     } else {
-        // Fallback ke file sederhana
-        if ($page == 'dashboard') {
-            include $base_path . 'dashboard.php';
-        } else {
-            echo '<div class="alert alert-warning">Halaman dalam pengembangan</div>';
-        }
+        echo '<div class="alert alert-warning">Halaman dalam pengembangan</div>';
     }
 }
 

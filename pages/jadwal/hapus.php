@@ -1,19 +1,18 @@
 <?php
-// pages/jadwal/hapus.php
-// Hanya proses hapus lalu redirect. Tidak boleh mengeluarkan output.
 session_start();
-include_once 'config/database.php';
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($id > 0) {
     $query = "DELETE FROM jadwal WHERE id = $id";
     if ($db->query($query)) {
-        $_SESSION['success'] = "Data jadwal berhasil dihapus";
+        $_SESSION['success'] = "Jadwal berhasil dihapus";
     } else {
-        $_SESSION['error'] = "Gagal menghapus data";
+        $_SESSION['error'] = "Gagal: " . $db->conn->error;
     }
+} else {
+    $_SESSION['error'] = "ID tidak valid";
 }
 
-header("Location: index.php?page=jadwal");
+header("Location: ../index.php?page=jadwal");
 exit();

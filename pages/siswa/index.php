@@ -1,9 +1,14 @@
 <div class="container-fluid px-0">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4><i class="bi bi-people-fill me-2"></i>Data Siswa</h4>
-        <a href="index.php?page=siswa&action=tambah" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> <span class="d-none d-md-inline">Tambah Siswa</span>
-        </a>
+        <div class="btn-group" role="group">
+            <a href="index.php?page=siswa&action=import" class="btn btn-success" title="Import dari Excel">
+                <i class="bi bi-file-earmark-arrow-down"></i> <span class="d-none d-md-inline">Import Excel</span>
+            </a>
+            <a href="index.php?page=siswa&action=tambah" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> <span class="d-none d-md-inline">Tambah Siswa</span>
+            </a>
+        </div>
     </div>
 
     <div class="card">

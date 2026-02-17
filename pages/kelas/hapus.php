@@ -1,5 +1,5 @@
 <?php
-include_once 'config/database.php';
+session_start();
 
 $id = $_GET['id'];
 
@@ -10,11 +10,9 @@ $db->query("UPDATE siswa SET kelas_id = NULL WHERE kelas_id = $id");
 $query = "DELETE FROM kelas WHERE id = $id";
 
 if ($db->query($query)) {
-    session_start();
     $_SESSION['success'] = "Kelas berhasil dihapus";
 } else {
-    session_start();
-    $_SESSION['error'] = "Gagal menghapus: " . $db->conn->error;
+    $_SESSION['error'] = "Gagal: " . $db->conn->error;
 }
 
 header("Location: ../index.php?page=kelas");

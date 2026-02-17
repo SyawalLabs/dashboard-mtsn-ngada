@@ -22,17 +22,17 @@ if (!isset($_SESSION['sekolah'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Sistem Akademik | MTsN Ngada</title>
+    <title><?= isset($title) ? $title . " | MTsN Ngada" : "Sistem Akademik | MTsN Ngada"; ?></title>
 
     <!-- Bootstrap CSS -->
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Bootstrap Icons -->
     <link href="node_modules/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    
+
     <!-- DataTables CSS -->
     <link href="node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    
+
     <!-- SweetAlert2 CSS -->
     <link href="node_modules/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
 
